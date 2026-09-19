@@ -1,0 +1,26 @@
+{
+  "name": "xeroxpress-backend",
+  "version": "1.0.0",
+  "description": "XeroXpress - College Xerox, Printing & Stationery Ordering Platform Backend",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch-path=src src/server.js"
+  },
+  "dependencies": {
+    "backend": "^0.0.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "docx": "^9.7.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
+    "mammoth": "^1.12.2",
+    "morgan": "^1.10.0",
+    "multer": "^2.3.0",
+    "mysql2": "^3.24.2",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.20.2",
+    "razorpay": "^2.9.8"
+  }
+}
