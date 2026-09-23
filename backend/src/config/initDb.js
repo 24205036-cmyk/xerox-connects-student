@@ -9,15 +9,22 @@ const initDatabase = async () => {
   const password = process.env.DB_PASSWORD || '';
   const dbName = process.env.DB_NAME || 'xeroxpress_db';
 
+  const useSsl = process.env.DB_SSL === 'true' || process.env.DB_SSL === 'require';
+  const sslConfig = useSsl ? { ssl: { rejectUnauthorized: false } } : {};
+
   console.log(`⏳ Initializing MySQL Database: ${dbName} on ${host}:${port}...`);
 
   // Step 1: Connect to server and create database if not exists
-  const rootConn = await mysql.createConnection({ host, port, user, password });
-  await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
-  await rootConn.end();
+  try {
+    const rootConn = await mysql.createConnection({ host, port, user, password, ...sslConfig });
+    await rootConn.query(`CREATE DATABASE IF NOT EXISTS \`${dbName}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`);
+    await rootConn.end();
+  } catch (err) {
+    console.log(`ℹ️ Root DB creation note: ${err.message}. Proceeding to connect directly to '${dbName}'...`);
+  }
 
   // Step 2: Connect to the specific database to create tables
-  const db = await mysql.createConnection({ host, port, user, password, database: dbName });
+  const db = await mysql.createConnection({ host, port, user, password, database: dbName, ...sslConfig });
 
   try {
     // 1. users table

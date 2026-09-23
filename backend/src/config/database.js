@@ -1,6 +1,8 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
+const useSsl = process.env.DB_SSL === 'true' || process.env.DB_SSL === 'require';
+
 const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: parseInt(process.env.DB_PORT || '3306', 10),
@@ -11,11 +13,15 @@ const dbConfig = {
   connectionLimit: 15,
   queueLimit: 0,
   enableKeepAlive: true,
-  keepAliveInitialDelay: 0
+  keepAliveInitialDelay: 0,
+  ...(useSsl ? { ssl: { rejectUnauthorized: false } } : {})
 };
 
-// Create the connection pool
-const pool = mysql.createPool(dbConfig);
+// Create the connection pool (supports direct URI string or config object)
+const connectionUri = process.env.DATABASE_URL || process.env.MYSQL_URL;
+const pool = connectionUri
+  ? mysql.createPool(connectionUri)
+  : mysql.createPool(dbConfig);
 
 // Helper for test queries
 const testConnection = async () => {
