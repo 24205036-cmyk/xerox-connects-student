@@ -7,10 +7,7 @@ import {
   ChevronDown,
   Sparkles,
   ArrowRight,
-  Printer,
-  Maximize2,
-  Sliders,
-  Move
+  Printer
 } from 'lucide-react';
 
 /**
@@ -60,26 +57,7 @@ export default function ImageScroller({
       ctaLink: '/login',
       priceBadge: '< 2 Hours Turnaround',
     },
-    {
-      image: { src: '/svc_color.jpg', alt: 'Creative Portfolios and Brochures' },
-      badge: '120–300 GSM Premium Media',
-      text: 'Portfolios & College Posters',
-      subtitle: 'Brochures, event flyers, seminar handouts, and glossy portfolio spreads with rich tone fidelity.',
-      tag: 'Creative Media',
-      ctaText: 'Order Event Posters',
-      ctaLink: '/login',
-      priceBadge: 'Bulk Discounts',
-    },
-    {
-      image: { src: '/svc_lab.jpg', alt: 'Hardbound Lab Records & Spiral Binding' },
-      badge: 'University Approved Standards',
-      text: 'Certified Lab Records & Binding',
-      subtitle: 'Department-standard record notebooks, thesis hard-binding with gold foil embossing, and durable spiral combs.',
-      tag: 'Record Binding',
-      ctaText: 'Order Lab Record',
-      ctaLink: '/login',
-      priceBadge: 'Binding from ₹40',
-    },
+
     {
       image: { src: '/svc_bw.jpg', alt: 'High Volume Laser Duplication' },
       badge: '1200 DPI Laser Clarity',
@@ -107,27 +85,28 @@ export default function ImageScroller({
   };
 
   const dock = {
+    show: userDock?.show ?? false, // Hidden per user request
     dockPosition: userDock?.dockPosition ?? 'bottom', // 'bottom' | 'center' | 'left' | 'right'
     thumbColor: userDock?.thumbColor ?? 'rgba(15, 23, 42, 0.68)',
     dockInset: userDock?.dockInset ?? 32,
-    dockPadding: userDock?.dockPadding ?? 12,
+    dockPadding: userDock?.dockPadding ?? 14,
     thumbBlur: userDock?.thumbBlur ?? 16,
-    thumbRadius: userDock?.thumbRadius ?? 20,
+    thumbRadius: userDock?.thumbRadius ?? 24,
   };
 
   const thumbnails = {
-    thumbSize: userThumbnails?.thumbSize ?? 72,
-    thumbnailRadius: userThumbnails?.thumbnailRadius ?? 14,
-    thumbPadding: userThumbnails?.thumbPadding ?? 10,
-    thumbImageRadius: userThumbnails?.thumbImageRadius ?? 12,
+    thumbSize: userThumbnails?.thumbSize ?? 96,
+    thumbnailRadius: userThumbnails?.thumbnailRadius ?? 18,
+    thumbPadding: userThumbnails?.thumbPadding ?? 12,
+    thumbImageRadius: userThumbnails?.thumbImageRadius ?? 16,
     dimInactive: userThumbnails?.dimInactive ?? true,
     inactiveOpacity: userThumbnails?.inactiveOpacity ?? 0.45,
   };
 
   const outline = {
-    outlineSize: userOutline?.outlineSize ?? 78,
+    outlineSize: userOutline?.outlineSize ?? 102,
     outlineThickness: userOutline?.outlineThickness ?? 2.5,
-    outlineRadius: userOutline?.outlineRadius ?? 16,
+    outlineRadius: userOutline?.outlineRadius ?? 20,
   };
 
   const dragHandle = {
@@ -135,11 +114,11 @@ export default function ImageScroller({
     dragHandleColor: userDragHandle?.dragHandleColor ?? 'rgba(255, 255, 255, 0.25)',
     dragHandleRadius: userDragHandle?.dragHandleRadius ?? 6,
     dragHandleBGBlur: userDragHandle?.dragHandleBGBlur ?? 8,
-    dragHandleWidth: userDragHandle?.dragHandleWidth ?? 44,
+    dragHandleWidth: userDragHandle?.dragHandleWidth ?? 54,
     dragHandleHeight: userDragHandle?.dragHandleHeight ?? 14,
     dragHandleInset: userDragHandle?.dragHandleInset ?? -18,
     dragHandleInnerColor: userDragHandle?.dragHandleInnerColor ?? '#ffffff',
-    dragHandleInnerWidth: userDragHandle?.dragHandleInnerWidth ?? 22,
+    dragHandleInnerWidth: userDragHandle?.dragHandleInnerWidth ?? 26,
     dragHandleInnerHeight: userDragHandle?.dragHandleInnerHeight ?? 4,
     dragHandleInnerRadius: userDragHandle?.dragHandleInnerRadius ?? 2,
     dragHandleInnerOpacity: userDragHandle?.dragHandleInnerOpacity ?? 0.85,
@@ -156,8 +135,7 @@ export default function ImageScroller({
   const [drag, setDrag] = useState({ x: 0, y: 0 });
   const dragOffset = useRef({ x: 0, y: 0 });
 
-  // Optional active transition state so user can toggle preview styles
-  const [activeTransitionType, setActiveTransitionType] = useState(transition.transitionType);
+  const activeTransitionType = transition.transitionType;
 
   // Scroll Progress
   const { scrollYProgress } = useScroll({
@@ -501,130 +479,6 @@ export default function ImageScroller({
           );
         })}
 
-        {/* ── Top Bar within Showcase (Slide indicator & Quick controls) ── */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 24,
-            left: 0,
-            right: 0,
-            padding: '0 32px',
-            zIndex: 25,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            pointerEvents: 'auto',
-          }}
-        >
-          {/* Live indicator badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              padding: '8px 16px',
-              borderRadius: 999,
-              background: 'rgba(15, 23, 42, 0.75)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-              color: '#f8fafc',
-              fontSize: 12,
-              fontWeight: 600,
-              boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
-            }}
-          >
-            <span
-              style={{
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                background: '#38bdf8',
-                boxShadow: '0 0 10px #38bdf8',
-                display: 'inline-block',
-                animation: 'pulse 2s infinite',
-              }}
-            />
-            <span style={{ letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 11 }}>
-              Campus Print Showcase
-            </span>
-            <span style={{ color: 'rgba(255,255,255,0.3)' }}>|</span>
-            <span style={{ color: '#93c5fd', fontFamily: 'monospace', fontWeight: 700 }}>
-              0{activeIndex + 1} / 0{validItems.length}
-            </span>
-          </div>
-
-          {/* Right controls: Transition changer + Direct skip button */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {/* Transition mode pill */}
-            <div
-              style={{
-                display: 'none', // shown on md screens via media query
-                alignItems: 'center',
-                gap: 6,
-                padding: '6px 12px',
-                borderRadius: 999,
-                background: 'rgba(15, 23, 42, 0.75)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                color: '#94a3b8',
-                fontSize: 11,
-              }}
-              className="showcase-controls-desktop"
-            >
-              <Sliders style={{ width: 12, height: 12, color: '#38bdf8' }} />
-              <span>FX:</span>
-              {['fade', 'scale', 'blur', 'zoom'].map((fx) => (
-                <button
-                  key={fx}
-                  onClick={() => setActiveTransitionType(fx)}
-                  style={{
-                    border: 'none',
-                    background: activeTransitionType === fx ? '#2563eb' : 'transparent',
-                    color: activeTransitionType === fx ? '#fff' : '#cbd5e1',
-                    padding: '3px 8px',
-                    borderRadius: 99,
-                    cursor: 'pointer',
-                    fontSize: 10,
-                    fontWeight: 600,
-                    textTransform: 'capitalize',
-                    transition: 'all 0.15s',
-                  }}
-                >
-                  {fx}
-                </button>
-              ))}
-            </div>
-
-            {/* Skip to Main Home / Order section */}
-            <button
-              onClick={handleScrollDownToContent}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                padding: '8px 16px',
-                borderRadius: 999,
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(16px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                color: '#ffffff',
-                fontSize: 12,
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-              }}
-            >
-              <span>Explore Home</span>
-              <ChevronDown style={{ width: 14, height: 14 }} />
-            </button>
-          </div>
-        </div>
 
         {/* ── Center Content Hero Overlay ───────────────────────────── */}
         <div
@@ -682,13 +536,13 @@ export default function ImageScroller({
                   {/* Main Cinematic Title */}
                   <h2
                     style={{
-                      fontSize: 'clamp(2.4rem, 5.2vw, 4.4rem)',
+                      fontSize: 'clamp(2.8rem, 6.2vw, 5.2rem)',
                       fontWeight: 900,
-                      lineHeight: 1.08,
+                      lineHeight: 1.06,
                       letterSpacing: '-0.04em',
                       color: '#ffffff',
-                      marginBottom: 16,
-                      textShadow: '0 4px 30px rgba(0, 0, 0, 0.8)',
+                      marginBottom: 18,
+                      textShadow: '0 4px 30px rgba(0, 0, 0, 0.85)',
                     }}
                   >
                     {item.text}
@@ -697,11 +551,11 @@ export default function ImageScroller({
                   {/* Subtitle description */}
                   <p
                     style={{
-                      fontSize: 'clamp(1rem, 1.6vw, 1.25rem)',
+                      fontSize: 'clamp(1.15rem, 1.8vw, 1.4rem)',
                       color: '#cbd5e1',
                       lineHeight: 1.6,
-                      maxWidth: 680,
-                      marginBottom: 28,
+                      maxWidth: 780,
+                      marginBottom: 32,
                       fontWeight: 400,
                       textShadow: '0 2px 16px rgba(0, 0, 0, 0.8)',
                     }}
@@ -715,7 +569,7 @@ export default function ImageScroller({
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      gap: 14,
+                      gap: 16,
                       pointerEvents: 'auto',
                       flexWrap: 'wrap',
                     }}
@@ -725,13 +579,13 @@ export default function ImageScroller({
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: 8,
-                        padding: '14px 28px',
-                        borderRadius: 14,
+                        gap: 10,
+                        padding: '16px 36px',
+                        borderRadius: 16,
                         background: 'linear-gradient(135deg, #2563eb 0%, #7c3aed 100%)',
                         color: '#ffffff',
                         fontWeight: 700,
-                        fontSize: 14,
+                        fontSize: 15,
                         textDecoration: 'none',
                         boxShadow: '0 8px 30px rgba(37, 99, 235, 0.5), 0 0 20px rgba(124, 58, 237, 0.3)',
                         transition: 'transform 0.2s ease, box-shadow 0.2s ease',
@@ -743,9 +597,9 @@ export default function ImageScroller({
                         e.currentTarget.style.transform = 'translateY(0) scale(1)';
                       }}
                     >
-                      <Printer style={{ width: 16, height: 16 }} />
+                      <Printer style={{ width: 18, height: 18 }} />
                       <span>{item.ctaText || 'Place Order'}</span>
-                      <ArrowRight style={{ width: 16, height: 16 }} />
+                      <ArrowRight style={{ width: 18, height: 18 }} />
                     </Link>
 
                     {item.priceBadge && (
@@ -753,15 +607,15 @@ export default function ImageScroller({
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
-                          gap: 6,
-                          padding: '13px 20px',
-                          borderRadius: 14,
+                          gap: 8,
+                          padding: '15px 24px',
+                          borderRadius: 16,
                           background: 'rgba(15, 23, 42, 0.75)',
                           backdropFilter: 'blur(16px)',
                           border: '1px solid rgba(255, 255, 255, 0.18)',
                           color: '#f1f5f9',
                           fontWeight: 700,
-                          fontSize: 13,
+                          fontSize: 14,
                         }}
                       >
                         <span style={{ color: '#38bdf8' }}>✦</span>
@@ -791,8 +645,8 @@ export default function ImageScroller({
             disabled={activeIndex === 0}
             aria-label="Previous image"
             style={{
-              width: 44,
-              height: 44,
+              width: 52,
+              height: 52,
               borderRadius: '50%',
               background: 'rgba(15, 23, 42, 0.65)',
               backdropFilter: 'blur(12px)',
@@ -812,7 +666,7 @@ export default function ImageScroller({
               if (activeIndex > 0) e.currentTarget.style.opacity = '0.85';
             }}
           >
-            <ChevronLeft style={{ width: 22, height: 22 }} />
+            <ChevronLeft style={{ width: 26, height: 26 }} />
           </button>
         </div>
 
@@ -831,8 +685,8 @@ export default function ImageScroller({
             disabled={activeIndex === validItems.length - 1}
             aria-label="Next image"
             style={{
-              width: 44,
-              height: 44,
+              width: 52,
+              height: 52,
               borderRadius: '50%',
               background: 'rgba(15, 23, 42, 0.65)',
               backdropFilter: 'blur(12px)',
@@ -852,206 +706,208 @@ export default function ImageScroller({
               if (activeIndex < validItems.length - 1) e.currentTarget.style.opacity = '0.85';
             }}
           >
-            <ChevronRight style={{ width: 22, height: 22 }} />
+            <ChevronRight style={{ width: 26, height: 26 }} />
           </button>
         </div>
 
         {/* ── DRAGGABLE INTERACTIVE DOCK (Framer Component Faithful) ──── */}
-        <div
-          ref={dockRef}
-          style={dockDynamicStyle}
-          onMouseDown={dragHandle.dragHandleShow ? handleDragStart : undefined}
-        >
-          {/* Drag Handle Top Bar */}
-          {dragHandle.dragHandleShow && (
+        {dock.show && (
+          <div
+            ref={dockRef}
+            style={dockDynamicStyle}
+            onMouseDown={dragHandle.dragHandleShow ? handleDragStart : undefined}
+          >
+            {/* Drag Handle Top Bar */}
+            {dragHandle.dragHandleShow && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: dragHandle.dragHandleInset,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: dragHandle.dragHandleWidth,
+                  height: dragHandle.dragHandleHeight,
+                  borderRadius: dragHandle.dragHandleRadius,
+                  background: dragHandle.dragHandleColor,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  zIndex: 35,
+                  cursor: isDragging ? 'grabbing' : 'grab',
+                  backdropFilter: dragHandle.dragHandleBGBlur
+                    ? `blur(${dragHandle.dragHandleBGBlur}px)`
+                    : undefined,
+                  WebkitBackdropFilter: dragHandle.dragHandleBGBlur
+                    ? `blur(${dragHandle.dragHandleBGBlur}px)`
+                    : undefined,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                }}
+                aria-label="Drag handle"
+                title="Drag to reposition thumbnail dock"
+              >
+                <svg
+                  width={dragHandle.dragHandleInnerWidth}
+                  height={dragHandle.dragHandleInnerHeight}
+                  viewBox={`0 0 ${dragHandle.dragHandleInnerWidth} ${dragHandle.dragHandleInnerHeight}`}
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ display: 'block' }}
+                >
+                  <rect
+                    x="0"
+                    y="0"
+                    width={dragHandle.dragHandleInnerWidth}
+                    height={dragHandle.dragHandleInnerHeight}
+                    rx={dragHandle.dragHandleInnerRadius}
+                    fill={dragHandle.dragHandleInnerColor}
+                    fillOpacity={dragHandle.dragHandleInnerOpacity}
+                  />
+                </svg>
+              </div>
+            )}
+
+            {/* Dock Glass Background Panel */}
             <div
               style={{
                 position: 'absolute',
-                top: dragHandle.dragHandleInset,
-                left: '50%',
-                transform: 'translateX(-50%)',
-                width: dragHandle.dragHandleWidth,
-                height: dragHandle.dragHandleHeight,
-                borderRadius: dragHandle.dragHandleRadius,
-                background: dragHandle.dragHandleColor,
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                background: dock.thumbColor,
+                borderRadius: dock.thumbRadius,
+                backdropFilter: dock.thumbBlur ? `blur(${dock.thumbBlur}px)` : undefined,
+                WebkitBackdropFilter: dock.thumbBlur ? `blur(${dock.thumbBlur}px)` : undefined,
+                border: '1px solid rgba(255, 255, 255, 0.16)',
+                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.3)',
+                zIndex: 0,
+                pointerEvents: 'none',
+              }}
+            />
+
+            {/* Thumbnails Row */}
+            <div
+              style={{
+                position: 'relative',
                 display: 'flex',
+                flexDirection: isHorizontal ? 'row' : 'column',
+                gap: thumbnails.thumbPadding,
+                zIndex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 35,
-                cursor: isDragging ? 'grabbing' : 'grab',
-                backdropFilter: dragHandle.dragHandleBGBlur
-                  ? `blur(${dragHandle.dragHandleBGBlur}px)`
-                  : undefined,
-                WebkitBackdropFilter: dragHandle.dragHandleBGBlur
-                  ? `blur(${dragHandle.dragHandleBGBlur}px)`
-                  : undefined,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+                padding: dock.dockPadding,
+                background: 'transparent',
               }}
-              aria-label="Drag handle"
-              title="Drag to reposition thumbnail dock"
             >
-              <svg
-                width={dragHandle.dragHandleInnerWidth}
-                height={dragHandle.dragHandleInnerHeight}
-                viewBox={`0 0 ${dragHandle.dragHandleInnerWidth} ${dragHandle.dragHandleInnerHeight}`}
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ display: 'block' }}
-              >
-                <rect
-                  x="0"
-                  y="0"
-                  width={dragHandle.dragHandleInnerWidth}
-                  height={dragHandle.dragHandleInnerHeight}
-                  rx={dragHandle.dragHandleInnerRadius}
-                  fill={dragHandle.dragHandleInnerColor}
-                  fillOpacity={dragHandle.dragHandleInnerOpacity}
-                />
-              </svg>
-            </div>
-          )}
+              {validItems.map((item, index) => {
+                const src = getImageSrc(item.image);
+                const isActive = activeIndex === index;
 
-          {/* Dock Glass Background Panel */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              background: dock.thumbColor,
-              borderRadius: dock.thumbRadius,
-              backdropFilter: dock.thumbBlur ? `blur(${dock.thumbBlur}px)` : undefined,
-              WebkitBackdropFilter: dock.thumbBlur ? `blur(${dock.thumbBlur}px)` : undefined,
-              border: '1px solid rgba(255, 255, 255, 0.16)',
-              boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.3)',
-              zIndex: 0,
-              pointerEvents: 'none',
-            }}
-          />
-
-          {/* Thumbnails Row */}
-          <div
-            style={{
-              position: 'relative',
-              display: 'flex',
-              flexDirection: isHorizontal ? 'row' : 'column',
-              gap: thumbnails.thumbPadding,
-              zIndex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: dock.dockPadding,
-              background: 'transparent',
-            }}
-          >
-            {validItems.map((item, index) => {
-              const src = getImageSrc(item.image);
-              const isActive = activeIndex === index;
-
-              return (
-                <div
-                  key={index}
-                  style={{
-                    position: 'relative',
-                    width: thumbnails.thumbSize,
-                    height: thumbnails.thumbSize,
-                    minWidth: thumbnails.thumbSize,
-                    minHeight: thumbnails.thumbSize,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onClick={() => handleThumbnailClick(index)}
-                  title={item.text}
-                >
-                  {/* Framer Animated Active Indicator Outline with Spring */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="thumb-outline"
-                      style={{
-                        position: 'absolute',
-                        top: `calc(50% - ${outline.outlineSize / 2}px)`,
-                        left: `calc(50% - ${outline.outlineSize / 2}px)`,
-                        width: outline.outlineSize,
-                        height: outline.outlineSize,
-                        boxSizing: 'border-box',
-                        border: `${outline.outlineThickness}px solid #38bdf8`,
-                        borderRadius: outline.outlineRadius,
-                        boxShadow: '0 0 16px rgba(56, 189, 248, 0.6), inset 0 0 8px rgba(56, 189, 248, 0.3)',
-                        pointerEvents: 'none',
-                        zIndex: 10,
-                        background: 'transparent',
-                      }}
-                      transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                    />
-                  )}
-
-                  {/* Thumbnail Card Content */}
+                return (
                   <div
+                    key={index}
                     style={{
-                      width: '100%',
-                      height: '100%',
-                      borderRadius: thumbnails.thumbImageRadius,
-                      overflow: 'hidden',
+                      position: 'relative',
+                      width: thumbnails.thumbSize,
+                      height: thumbnails.thumbSize,
+                      minWidth: thumbnails.thumbSize,
+                      minHeight: thumbnails.thumbSize,
+                      cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      position: 'relative',
-                      opacity: thumbnails.dimInactive && !isActive ? thumbnails.inactiveOpacity : 1,
-                      transform: isActive ? 'scale(1.04)' : 'scale(1)',
-                      transition: 'opacity 0.25s ease, transform 0.25s ease',
-                      border: isActive
-                        ? '1px solid rgba(255,255,255,0.4)'
-                        : '1px solid rgba(255,255,255,0.08)',
                     }}
+                    onClick={() => handleThumbnailClick(index)}
+                    title={item.text}
                   >
-                    <img
-                      src={src}
-                      alt={item.image?.alt || item.text}
+                    {/* Framer Animated Active Indicator Outline with Spring */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="thumb-outline"
+                        style={{
+                          position: 'absolute',
+                          top: `calc(50% - ${outline.outlineSize / 2}px)`,
+                          left: `calc(50% - ${outline.outlineSize / 2}px)`,
+                          width: outline.outlineSize,
+                          height: outline.outlineSize,
+                          boxSizing: 'border-box',
+                          border: `${outline.outlineThickness}px solid #38bdf8`,
+                          borderRadius: outline.outlineRadius,
+                          boxShadow: '0 0 16px rgba(56, 189, 248, 0.6), inset 0 0 8px rgba(56, 189, 248, 0.3)',
+                          pointerEvents: 'none',
+                          zIndex: 10,
+                          background: 'transparent',
+                        }}
+                        transition={{ type: 'spring', stiffness: 450, damping: 32 }}
+                      />
+                    )}
+
+                    {/* Thumbnail Card Content */}
+                    <div
                       style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: 'center',
-                        display: 'block',
-                      }}
-                      draggable={false}
-                    />
-
-                    {/* Gradient label overlay on hover/active */}
-                    <div
-                      style={{
-                        position: 'absolute',
-                        inset: 0,
-                        background: isActive
-                          ? 'linear-gradient(to top, rgba(14, 165, 233, 0.4) 0%, transparent 60%)'
-                          : 'rgba(0, 0, 0, 0.2)',
-                        transition: 'background 0.2s',
-                      }}
-                    />
-
-                    {/* Miniature index badge */}
-                    <span
-                      style={{
-                        position: 'absolute',
-                        bottom: 3,
-                        right: 4,
-                        fontSize: 9,
-                        fontWeight: 800,
-                        color: '#ffffff',
-                        textShadow: '0 1px 4px rgba(0,0,0,0.9)',
-                        fontFamily: 'monospace',
+                        borderRadius: thumbnails.thumbImageRadius,
+                        overflow: 'hidden',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative',
+                        opacity: thumbnails.dimInactive && !isActive ? thumbnails.inactiveOpacity : 1,
+                        transform: isActive ? 'scale(1.04)' : 'scale(1)',
+                        transition: 'opacity 0.25s ease, transform 0.25s ease',
+                        border: isActive
+                          ? '1px solid rgba(255,255,255,0.4)'
+                          : '1px solid rgba(255,255,255,0.08)',
                       }}
                     >
-                      0{index + 1}
-                    </span>
+                      <img
+                        src={src}
+                        alt={item.image?.alt || item.text}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          objectPosition: 'center',
+                          display: 'block',
+                        }}
+                        draggable={false}
+                      />
+
+                      {/* Gradient label overlay on hover/active */}
+                      <div
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: isActive
+                            ? 'linear-gradient(to top, rgba(14, 165, 233, 0.4) 0%, transparent 60%)'
+                            : 'rgba(0, 0, 0, 0.2)',
+                          transition: 'background 0.2s',
+                        }}
+                      />
+
+                      {/* Miniature index badge */}
+                      <span
+                        style={{
+                          position: 'absolute',
+                          bottom: 3,
+                          right: 4,
+                          fontSize: 9,
+                          fontWeight: 800,
+                          color: '#ffffff',
+                          textShadow: '0 1px 4px rgba(0,0,0,0.9)',
+                          fontFamily: 'monospace',
+                        }}
+                      >
+                        0{index + 1}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── Bottom Scroll Down Cue / Hint ────────────────────────── */}
         <div

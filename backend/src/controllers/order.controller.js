@@ -146,12 +146,12 @@ const createOrder = async (req, res, next) => {
 
     // 1. Validate order window
     const windowStatus = await checkOrderWindowStatus();
-    if (!windowStatus.isOpen) {
+    if (!windowStatus.orderingEnabled) {
       await conn.rollback();
       conn.release();
       return res.status(403).json({
         status: 'error',
-        message: "Today's order window is closed. Orders placed now will be for tomorrow's batch.",
+        message: 'Online ordering is currently disabled by the campus administrator.',
         orderWindow: windowStatus
       });
     }
@@ -284,42 +284,84 @@ const createOrder = async (req, res, next) => {
       await conn.query('UPDATE stationery SET stock = stock - ? WHERE id = ?', [si.quantity, si.stationery_id]);
     }
 
-    // 10. Insert payment record with server-side transaction check
-    let isPaid = (payment_status === 'PAID' || payment_status === 'COMPLETED');
+    // 10. Server-side payment validation & print release protection
     const rzpOrderId = req.body.razorpay_order_id || null;
+    const finalRef = payment_reference || null;
 
-    if (isPaid && (payment_method === 'RAZORPAY' || rzpOrderId || (payment_reference && payment_reference.startsWith('pay_')))) {
-      const [txRows] = await conn.query(
-        `SELECT id, status FROM payment_transactions 
-         WHERE (razorpay_payment_id = ? OR (razorpay_order_id = ? AND razorpay_order_id IS NOT NULL)) 
-           AND status = 'PAID' AND user_id = ?`,
-        [payment_reference || '', rzpOrderId || '', studentId]
+    if (!finalRef && !rzpOrderId) {
+      await conn.rollback();
+      conn.release();
+      return res.status(400).json({
+        status: 'error',
+        message: 'A verified Razorpay payment is required to place a print order.'
+      });
+    }
+
+    // Verify transaction against payment_transactions table
+    const [txRows] = await conn.query(
+      `SELECT id, amount, status, order_id, user_id, razorpay_payment_id, payment_method
+       FROM payment_transactions 
+       WHERE (razorpay_payment_id = ? OR (razorpay_order_id = ? AND razorpay_order_id IS NOT NULL)) 
+         AND user_id = ?`,
+      [finalRef || '', rzpOrderId || '', studentId]
+    );
+
+    if (txRows.length === 0 || txRows[0].status !== 'PAID') {
+      await conn.rollback();
+      conn.release();
+      return res.status(400).json({
+        status: 'error',
+        message: 'Payment verification failed: No confirmed Razorpay payment found for this transaction.'
+      });
+    }
+
+    const tx = txRows[0];
+    const txAmount = parseFloat(tx.amount);
+
+    // Amount tampering protection: compare verified transaction amount with calculated total
+    if (Math.abs(txAmount - totalAmount) > 0.05) {
+      await conn.rollback();
+      conn.release();
+      return res.status(400).json({
+        status: 'error',
+        message: `Payment amount mismatch: Order total is ₹${totalAmount.toFixed(2)}, but verified payment amount was ₹${txAmount.toFixed(2)}.`
+      });
+    }
+
+    // Protection against reusing the same payment for multiple print orders
+    const resolvedPayId = tx.razorpay_payment_id || finalRef;
+    if (resolvedPayId) {
+      const [duplicateOrderUsage] = await conn.query(
+        `SELECT order_id FROM payments WHERE transaction_reference = ?`,
+        [resolvedPayId]
       );
-      if (txRows.length === 0) {
-        // Fallback: If not verified in payment_transactions, mark as PENDING
-        isPaid = false;
+      if (duplicateOrderUsage.length > 0) {
+        await conn.rollback();
+        conn.release();
+        return res.status(400).json({
+          status: 'error',
+          message: `Payment transaction (${resolvedPayId}) has already been used for order #${duplicateOrderUsage[0].order_id}. Cannot reuse payment.`
+        });
       }
     }
 
-    const finalPaymentStatus = isPaid ? 'PAID' : 'PENDING';
-    const finalPaymentMethod = payment_method || 'RAZORPAY';
-    const paidAt = isPaid ? new Date() : null;
+    const finalPaymentStatus = 'PAID';
+    const finalPaymentMethod = tx.payment_method || payment_method || 'RAZORPAY';
+    const paidAt = new Date();
 
     await conn.query(
       `INSERT INTO payments (order_id, amount, payment_method, transaction_reference, payment_status, paid_at)
        VALUES (?, ?, ?, ?, ?, ?)`,
-      [orderId, totalAmount.toFixed(2), finalPaymentMethod, payment_reference || null, finalPaymentStatus, paidAt]
+      [orderId, totalAmount.toFixed(2), finalPaymentMethod, resolvedPayId, finalPaymentStatus, paidAt]
     );
 
-    // Link payment_transactions table if razorpay record exists
-    if (rzpOrderId || payment_reference) {
-      await conn.query(
-        `UPDATE payment_transactions
-         SET order_id = ?
-         WHERE (razorpay_order_id = ? OR razorpay_payment_id = ?) AND user_id = ?`,
-        [orderId, rzpOrderId || '', payment_reference || '', studentId]
-      );
-    }
+    // Link payment_transactions row to this newly created order
+    await conn.query(
+      `UPDATE payment_transactions
+       SET order_id = ?
+       WHERE id = ?`,
+      [orderId, tx.id]
+    );
 
     // 11. Insert status history
     await conn.query(

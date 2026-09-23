@@ -589,6 +589,129 @@ const getReports = async (req, res, next) => {
   }
 };
 
+/**
+ * Get all Payment Transactions with audit log for Admin
+ * GET /api/admin/payments
+ */
+const getPaymentTransactions = async (req, res, next) => {
+  try {
+    const { status, search, page = 1, limit = 50 } = req.query;
+    const pageNum = Math.max(1, parseInt(page, 10));
+    const pageSize = Math.min(100, Math.max(10, parseInt(limit, 10)));
+    const offset = (pageNum - 1) * pageSize;
+
+    let whereClause = 'WHERE 1=1';
+    const params = [];
+
+    if (status && status !== 'ALL') {
+      whereClause += ' AND pt.status = ?';
+      params.push(status);
+    }
+
+    if (search && search.trim()) {
+      const q = `%${search.trim()}%`;
+      whereClause += ' AND (u.name LIKE ? OR u.email LIKE ? OR u.register_number LIKE ? OR pt.razorpay_order_id LIKE ? OR pt.razorpay_payment_id LIKE ? OR o.order_number LIKE ?)';
+      params.push(q, q, q, q, q, q);
+    }
+
+    // Query transactions with student and order information
+    const [transactions] = await pool.query(
+      `SELECT 
+         pt.id,
+         pt.user_id,
+         pt.order_id,
+         pt.razorpay_order_id,
+         pt.razorpay_payment_id,
+         pt.amount,
+         pt.currency,
+         pt.status,
+         pt.payment_method,
+         pt.receipt,
+         pt.admin_notes,
+         pt.created_at,
+         pt.updated_at,
+         u.name as customer_name,
+         u.email as customer_email,
+         u.phone as customer_phone,
+         u.register_number,
+         o.order_number
+       FROM payment_transactions pt
+       JOIN users u ON u.id = pt.user_id
+       LEFT JOIN orders o ON o.id = pt.order_id
+       ${whereClause}
+       ORDER BY pt.created_at DESC
+       LIMIT ? OFFSET ?`,
+      [...params, pageSize, offset]
+    );
+
+    // Summary counts by status
+    const [statusCountsRows] = await pool.query(
+      `SELECT status, COUNT(*) as count FROM payment_transactions GROUP BY status`
+    );
+    const statusCounts = {};
+    statusCountsRows.forEach(r => { statusCounts[r.status] = Number(r.count); });
+
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        transactions,
+        statusCounts,
+        pagination: { page: pageNum, limit: pageSize }
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Review Extra / Duplicate Payment
+ * PATCH /api/admin/payments/:id/review-extra
+ */
+const reviewExtraPayment = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { admin_notes, status } = req.body;
+
+    const [existing] = await pool.query(
+      'SELECT id, status FROM payment_transactions WHERE id = ?',
+      [id]
+    );
+
+    if (existing.length === 0) {
+      return res.status(404).json({ status: 'error', message: 'Payment transaction record not found.' });
+    }
+
+    const updates = [];
+    const params = [];
+
+    if (admin_notes !== undefined) {
+      updates.push('admin_notes = ?');
+      params.push(admin_notes);
+    }
+
+    if (status && ['PAID', 'FAILED', 'REFUNDED', 'EXTRA_PAYMENT'].includes(status)) {
+      updates.push('status = ?');
+      params.push(status);
+    }
+
+    if (updates.length > 0) {
+      params.push(id);
+      await pool.query(
+        `UPDATE payment_transactions SET ${updates.join(', ')} WHERE id = ?`,
+        params
+      );
+    }
+
+    return res.status(200).json({
+      status: 'success',
+      message: 'Payment transaction review updated successfully.'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   getAdminDashboardSummary,
   getUsers,
@@ -603,5 +726,7 @@ module.exports = {
   updatePrintPrices,
   getSystemSettings,
   updateSystemSettings,
-  getReports
+  getReports,
+  getPaymentTransactions,
+  reviewExtraPayment
 };

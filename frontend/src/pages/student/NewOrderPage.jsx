@@ -5,7 +5,7 @@ import {
   Settings2, Plus, Minus, Info, ArrowRight, ArrowLeft,
   Sparkles, Layers, ShieldCheck, HelpCircle, FileCheck,
   FileCode2, CornerDownRight, IndianRupee, Loader2, RefreshCw,
-  ShoppingCart, Package, CreditCard, SendHorizonal, Receipt, Smartphone
+  ShoppingCart, Package, CreditCard, SendHorizonal, Receipt, Smartphone, Lock
 } from 'lucide-react';
 import {
   getPrintPrices, uploadOrderFiles, deleteDraftFile,
@@ -275,9 +275,8 @@ export default function NewOrderPage() {
   const handleSubmitOrder = async (customPaymentData = null) => {
     setErrorMessage(null);
     const payData = customPaymentData || verifiedPaymentData;
-    const finalRef = payData?.payment_reference || paymentRef.trim();
 
-    if (!finalRef) {
+    if (!payData || !payData.payment_reference) {
       setIsPaymentModalOpen(true);
       return;
     }
@@ -298,10 +297,10 @@ export default function NewOrderPage() {
           config: f.config
         })),
         stationery: stationeryItems,
-        payment_reference: finalRef,
-        razorpay_order_id: payData?.razorpay_order_id || null,
-        payment_method: payData?.payment_method || 'RAZORPAY',
-        payment_status: payData?.payment_status || (payData?.payment_reference ? 'PAID' : 'PENDING'),
+        payment_reference: payData.payment_reference,
+        razorpay_order_id: payData.razorpay_order_id || null,
+        payment_method: payData.payment_method || 'RAZORPAY',
+        payment_status: 'PAID',
         additional_instructions: additionalInstructions.trim() || null
       };
 
@@ -932,71 +931,48 @@ export default function NewOrderPage() {
                   <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 space-y-1">
                     <div className="flex items-center gap-2 text-emerald-700 font-bold text-xs">
                       <CheckCircle2 className="w-4 h-4" />
-                      <span>UPI Payment Verified Successfully!</span>
+                      <span>Razorpay Payment Verified Successfully!</span>
                     </div>
                     <p className="text-[11px] text-slate-600 font-mono">
                       Ref: {verifiedPaymentData.payment_reference} ({verifiedPaymentData.payment_method})
                     </p>
                   </div>
                 ) : (
-                  <>
-                    <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10.5px] font-bold text-blue-300 uppercase tracking-wider">
-                          Pay with Phone Number / UPI
-                        </span>
-                        <span className="text-sm font-black text-emerald-400">
-                          ₹{grandTotal.toFixed(2)}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-300 leading-relaxed">
-                        Enter your 10-digit mobile number linked to Google Pay, PhonePe, or Paytm to get an instant approval request on your phone.
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => setIsPaymentModalOpen(true)}
-                        className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 transition cursor-pointer hover:scale-[1.01]"
-                      >
-                        <Smartphone className="w-4 h-4" />
-                        <span>Pay ₹{grandTotal.toFixed(2)} with Phone Number</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 text-white space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10.5px] font-bold text-blue-300 uppercase tracking-wider">
+                        Pay with Phone / UPI / Card
+                      </span>
+                      <span className="text-sm font-black text-emerald-400">
+                        ₹{grandTotal.toFixed(2)}
+                      </span>
                     </div>
-
-                    <div className="relative flex py-1 items-center">
-                      <div className="flex-grow border-t border-slate-200" />
-                      <span className="flex-shrink mx-2 text-[10.5px] font-semibold text-slate-400 uppercase">Or Manual UTR</span>
-                      <div className="flex-grow border-t border-slate-200" />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-xs font-bold text-slate-800">
-                        Existing UPI Transaction Ref / UTR
-                      </label>
-                      <input
-                        type="text"
-                        value={paymentRef}
-                        onChange={(e) => setPaymentRef(e.target.value)}
-                        placeholder="e.g. GPay-432819572334 or UTR number"
-                        className={`w-full bg-white border rounded-xl px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none transition font-mono ${
-                          paymentRef.trim()
-                            ? 'border-emerald-500 focus:ring-2 focus:ring-emerald-100'
-                            : 'border-slate-300 focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100'
-                        }`}
-                      />
-                    </div>
-                  </>
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      Complete payment via official Razorpay gateway using Phone Number, UPI (Google Pay, PhonePe, Paytm), Card, or Netbanking.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setIsPaymentModalOpen(true)}
+                      className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs rounded-xl flex items-center justify-center gap-2 shadow-md shadow-indigo-600/30 transition cursor-pointer hover:scale-[1.01]"
+                    >
+                      <Smartphone className="w-4 h-4" />
+                      <span>Pay ₹{grandTotal.toFixed(2)} with Razorpay</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 )}
 
                 <button
                   onClick={() => handleSubmitOrder()}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !verifiedPaymentData}
                   className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition cursor-pointer"
                 >
                   {isSubmitting ? (
                     <><Loader2 className="w-4 h-4 animate-spin" /> Placing Order...</>
+                  ) : verifiedPaymentData ? (
+                    <><SendHorizonal className="w-4 h-4" /> Place Order to Queue — ₹{grandTotal.toFixed(2)}</>
                   ) : (
-                    <><SendHorizonal className="w-4 h-4" /> Place Order — ₹{grandTotal.toFixed(2)}</>
+                    <><Lock className="w-4 h-4" /> Payment Required to Place Order</>
                   )}
                 </button>
               </div>
@@ -1010,6 +986,17 @@ export default function NewOrderPage() {
         isOpen={isPaymentModalOpen}
         onClose={() => setIsPaymentModalOpen(false)}
         amount={grandTotal}
+        files={uploadedFiles.map((f) => ({
+          stored_filename: f.stored_filename,
+          original_name: f.original_name,
+          page_count: f.page_count,
+          file_size: f.file_size,
+          config: f.config
+        }))}
+        stationery={Object.entries(stationeryCart).map(([id, qty]) => ({
+          stationery_id: parseInt(id, 10),
+          quantity: qty
+        }))}
         onPaymentSuccess={handlePaymentSuccess}
       />
 

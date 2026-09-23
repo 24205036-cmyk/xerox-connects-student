@@ -14,7 +14,9 @@ const {
   updatePrintPrices,
   getSystemSettings,
   updateSystemSettings,
-  getReports
+  getReports,
+  getPaymentTransactions,
+  reviewExtraPayment
 } = require('../controllers/admin.controller');
 const { authenticateToken, requireRole } = require('../middleware/auth');
 
@@ -49,5 +51,9 @@ router.put('/settings', updateSystemSettings);
 
 // Reports & Business Analytics
 router.get('/reports', getReports);
+
+// Razorpay Payment Transactions Audit & Extra Payment Review
+router.get('/payments', getPaymentTransactions);
+router.patch('/payments/:id/review-extra', reviewExtraPayment);
 
 module.exports = router;

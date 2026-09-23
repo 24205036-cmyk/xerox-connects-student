@@ -208,6 +208,14 @@ export const getAdminReports = async () => {
   return await api.get('/admin/reports');
 };
 
+export const getAdminPayments = async (params = {}) => {
+  return await api.get('/admin/payments', { params });
+};
+
+export const reviewExtraPayment = async (id, data) => {
+  return await api.patch(`/admin/payments/${id}/review-extra`, data);
+};
+
 // Notification APIs
 export const getNotifications = async () => {
   return await api.get('/notifications');

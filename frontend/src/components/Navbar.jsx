@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Printer, Menu, X, ArrowRight, Zap } from 'lucide-react';
-import { checkHealth } from '../services/api';
-
 export default function Navbar() {
-  const [isOpen, setIsOpen]       = useState(false);
-  const [scrolled, setScrolled]   = useState(false);
-  const [apiStatus, setApiStatus] = useState('checking');
+  const [isOpen, setIsOpen]     = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -15,17 +12,7 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    let mounted = true;
-    checkHealth()
-      .then(() => { if (mounted) setApiStatus('online'); })
-      .catch(() => { if (mounted) setApiStatus('offline'); });
-    return () => { mounted = false; };
-  }, []);
-
   useEffect(() => setIsOpen(false), [location.pathname]);
-
-  const isOnline = apiStatus === 'online';
 
   return (
     <header style={{
@@ -64,9 +51,6 @@ export default function Navbar() {
           <nav style={{ display: 'flex', alignItems: 'center', gap: 4 }} className="hidden-mobile">
             {[
               { label: 'Home',         href: '/' },
-              { label: 'Services',     href: '/#services' },
-              { label: 'Converter',    href: '/student/document-converter' },
-              { label: 'Pricing',      href: '/#pricing' },
             ].map(({ label, href }) => (
               <a key={label} href={href}
                 style={{
@@ -85,22 +69,6 @@ export default function Navbar() {
 
           {/* Right actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }} className="hidden-mobile">
-            {/* API status */}
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
-              borderRadius: 20, fontSize: 11, fontWeight: 600,
-              background: isOnline ? 'rgba(16,185,129,0.12)' : 'rgba(245,158,11,0.12)',
-              border: `1px solid ${isOnline ? 'rgba(16,185,129,0.3)' : 'rgba(245,158,11,0.3)'}`,
-              color: isOnline ? '#34d399' : '#fbbf24',
-            }}>
-              <span style={{
-                width: 7, height: 7, borderRadius: '50%',
-                background: isOnline ? '#10b981' : '#f59e0b',
-                boxShadow: isOnline ? '0 0 8px #10b981' : 'none',
-                display: 'inline-block'
-              }} />
-              API {apiStatus === 'checking' ? 'Checking…' : isOnline ? 'Online' : 'Offline'}
-            </div>
 
             <Link to="/login" style={{
               padding: '8px 14px', borderRadius: 9, fontSize: 13, fontWeight: 600,
@@ -149,9 +117,6 @@ export default function Navbar() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2, marginBottom: 12 }}>
             {[
               { label: 'Home',         href: '/' },
-              { label: 'Services',     href: '/#services' },
-              { label: 'Converter',    href: '/student/document-converter' },
-              { label: 'Pricing',      href: '/#pricing' },
             ].map(({ label, href }) => (
               <a key={label} href={href} onClick={() => setIsOpen(false)}
                 style={{ padding: '11px 8px', borderRadius: 8, fontSize: 14, fontWeight: 600, color: '#e2e8f0', textDecoration: 'none' }}>

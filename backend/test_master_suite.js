@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { Document, Packer, Paragraph, TextRun } = require('docx');
+const { pool } = require('./src/config/database');
 
 async function runMasterTestSuite() {
   console.log('================================================================');
@@ -107,10 +108,20 @@ async function runMasterTestSuite() {
         }
       }
     ],
-    stationery: [],
-    payment_reference: 'UPI-REF-' + Date.now(),
-    additional_instructions: 'Please staple on the top-left corner.'
+    stationery: []
   };
+
+  const rzpOrderId = `order_test_${Date.now()}`;
+  const rzpPaymentId = `pay_test_${Date.now()}`;
+  await pool.query(
+    `INSERT INTO payment_transactions (user_id, razorpay_order_id, razorpay_payment_id, amount, currency, status, payment_method)
+     VALUES (?, ?, ?, 4.00, 'INR', 'PAID', 'RAZORPAY')`,
+    [studentAuth.user.id, rzpOrderId, rzpPaymentId]
+  );
+
+  orderPayload.payment_reference = rzpPaymentId;
+  orderPayload.razorpay_order_id = rzpOrderId;
+  orderPayload.additional_instructions = 'Please staple on the top-left corner.';
 
   const createRes = await fetch(BASE_URL + '/orders', {
     method: 'POST',
@@ -119,6 +130,7 @@ async function runMasterTestSuite() {
   }).then(r => r.json());
 
   const createdOrder = createRes.order || createRes.data?.order;
+  if (!createdOrder) console.error('Order creation failed with response:', createRes);
   console.log('✔ [4/7] Order Created in MySQL:', createdOrder?.order_number, '| Batch:', createdOrder?.batch_date, '| Amount: ₹' + createdOrder?.total_amount);
 
   // 5. Xerox Staff Order Processing Lifecycle

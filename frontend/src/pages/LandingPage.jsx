@@ -10,19 +10,6 @@ import {
 import { checkHealth } from '../services/api';
 import ImageScroller from '../components/ImageScroller';
 
-/* ── Fade-up on scroll ────────────────────────────────────────── */
-function FadeUp({ children, delay = 0 }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 
 /* ── FAQ item ─────────────────────────────────────────────────── */
 function FaqItem({ q, a }) {
@@ -86,13 +73,6 @@ export default function LandingPage() {
     'Transparent per-page pricing',
   ];
 
-  const services = [
-    { label: 'B&W Print', sub: 'Assignments, notes & records', price: '₹1.50/page', color: '#2563eb' },
-    { label: 'Color Print', sub: 'Diagrams, presentations', price: '₹5.00/page', color: '#7c3aed' },
-    { label: 'Double Side', sub: 'Save paper & bulk orders', price: '₹2.00/page', color: '#0ea5e9' },
-    { label: 'PDF Convert', sub: 'PDF ↔ Word built-in', price: 'Free', color: '#10b981' },
-    { label: 'Lab Records', sub: 'Print your lab observation', price: '₹1.50/page', color: '#f59e0b' },
-  ];
 
   const stats = [
     { value: '2,400+', label: 'Print Orders', icon: '📦' },
@@ -233,41 +213,6 @@ export default function LandingPage() {
         `}</style>
       </section>
 
-      {/* ══════════════════════════════════════════════════════════
-          §2 SERVICES STRIP  (like Image 2 bottom cards row)
-      ══════════════════════════════════════════════════════════ */}
-      <section style={{ background: '#fff', borderTop: '1px solid #f1f5f9', padding: '32px 0' }}>
-        <div style={{ maxWidth: 1300, margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1rem' }} className="services-strip">
-            {services.map((svc, i) => (
-              <FadeUp key={svc.label} delay={i * 0.06}>
-                <div style={{
-                  display: 'flex', alignItems: 'flex-start', gap: 12,
-                  padding: '16px', borderRadius: 14,
-                  background: '#fafafa', border: '1px solid #f1f5f9',
-                  transition: 'all 0.2s ease',
-                  cursor: 'default',
-                }}
-                  onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 24px rgba(15,23,42,0.08)'; e.currentTarget.style.background = '#fff'; }}
-                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.background = '#fafafa'; }}
-                >
-                  <div style={{ width: 40, height: 40, borderRadius: 10, background: svc.color + '15', border: `1px solid ${svc.color}25`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <FileText style={{ width: 18, height: 18, color: svc.color }} />
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: '#0f172a', marginBottom: 3 }}>{svc.label}</p>
-                    <p style={{ fontSize: 11, color: '#64748b', lineHeight: 1.5, marginBottom: 6 }}>{svc.sub}</p>
-                    <Link to="/login" style={{ fontSize: 11, fontWeight: 700, color: svc.color, textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
-                      {svc.price} <ArrowRight style={{ width: 10, height: 10 }} />
-                    </Link>
-                  </div>
-                </div>
-              </FadeUp>
-            ))}
-          </div>
-        </div>
-        <style>{`@media (max-width: 1023px) { .services-strip { grid-template-columns: repeat(3,1fr) !important; } } @media (max-width: 639px) { .services-strip { grid-template-columns: repeat(2,1fr) !important; } }`}</style>
-      </section>
 
     </div>
   );

@@ -120,13 +120,14 @@ const initDatabase = async () => {
         amount DECIMAL(10,2) NOT NULL,
         payment_method VARCHAR(50) DEFAULT 'UPI_GPAY',
         transaction_reference VARCHAR(100) DEFAULT NULL,
-        payment_status ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED') NOT NULL DEFAULT 'PENDING',
+        payment_status ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED', 'EXTRA_PAYMENT') NOT NULL DEFAULT 'PENDING',
         paid_at DATETIME DEFAULT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
         INDEX idx_payments_order (order_id),
-        INDEX idx_payments_status (payment_status)
+        INDEX idx_payments_status (payment_status),
+        UNIQUE KEY uq_payments_txn_ref (transaction_reference)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
 
@@ -141,19 +142,35 @@ const initDatabase = async () => {
         razorpay_signature VARCHAR(255) DEFAULT NULL,
         amount DECIMAL(10,2) NOT NULL,
         currency VARCHAR(10) DEFAULT 'INR',
-        status ENUM('CREATED', 'PENDING', 'PAID', 'FAILED', 'REFUNDED') NOT NULL DEFAULT 'CREATED',
+        status ENUM('CREATED', 'PENDING', 'PAID', 'FAILED', 'REFUNDED', 'DUPLICATE', 'EXTRA_PAYMENT') NOT NULL DEFAULT 'CREATED',
         payment_method VARCHAR(50) DEFAULT 'RAZORPAY',
         receipt VARCHAR(100) DEFAULT NULL,
+        admin_notes TEXT DEFAULT NULL,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
         INDEX idx_pt_user (user_id),
         INDEX idx_pt_order (order_id),
         INDEX idx_pt_rzp_order (razorpay_order_id),
-        INDEX idx_pt_rzp_payment (razorpay_payment_id),
+        UNIQUE KEY uq_pt_rzp_payment (razorpay_payment_id),
         INDEX idx_pt_status (status)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
     `);
+
+    // 6c. webhook_events table for webhook idempotency
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS webhook_events (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        event_id VARCHAR(100) UNIQUE NOT NULL,
+        event_type VARCHAR(100) NOT NULL,
+        payload JSON DEFAULT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_we_event_id (event_id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    `);
+
+    // Apply incremental schema alterations for existing databases
+    await applyPaymentMigrations(db);
 
     // 7. order_status_history table
     await db.query(`
@@ -219,6 +236,38 @@ const initDatabase = async () => {
     console.log('✅ Database tables and seed data initialized successfully.');
   } finally {
     await db.end();
+  }
+};
+
+const applyPaymentMigrations = async (db) => {
+  try {
+    // 1. Check and add admin_notes to payment_transactions if not exists
+    const [ptCols] = await db.query("SHOW COLUMNS FROM payment_transactions LIKE 'admin_notes'");
+    if (ptCols.length === 0) {
+      await db.query("ALTER TABLE payment_transactions ADD COLUMN admin_notes TEXT DEFAULT NULL AFTER receipt");
+    }
+
+    // 2. Safely expand status ENUM for payment_transactions
+    await db.query(`
+      ALTER TABLE payment_transactions 
+      MODIFY COLUMN status ENUM('CREATED', 'PENDING', 'PAID', 'FAILED', 'REFUNDED', 'DUPLICATE', 'EXTRA_PAYMENT') NOT NULL DEFAULT 'CREATED'
+    `);
+
+    // 3. Safely expand payment_status ENUM for payments
+    await db.query(`
+      ALTER TABLE payments 
+      MODIFY COLUMN payment_status ENUM('PENDING', 'PAID', 'FAILED', 'REFUNDED', 'EXTRA_PAYMENT') NOT NULL DEFAULT 'PENDING'
+    `);
+
+    // 4. Ensure UNIQUE constraint on razorpay_payment_id in payment_transactions
+    const [ptIndexes] = await db.query("SHOW INDEX FROM payment_transactions WHERE Key_name = 'uq_pt_rzp_payment'");
+    if (ptIndexes.length === 0) {
+      try {
+        await db.query("ALTER TABLE payment_transactions ADD UNIQUE KEY uq_pt_rzp_payment (razorpay_payment_id)");
+      } catch (_) { /* ignore if already unique or duplicate keys */ }
+    }
+  } catch (err) {
+    console.warn('⚠️ Payment migration check notice:', err.message);
   }
 };
 
