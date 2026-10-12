@@ -38,7 +38,7 @@ export default function ImageScroller({
   // Default Items tailored to XeroXpress campus printing
   const defaultItems = [
     {
-      image: { src: '/campus_hub.jpg', alt: 'XeroXpress Campus Print Hub' },
+      image: { src: '/campus_service_center.jpg', alt: 'Bright Sunlit Campus Print & Xerox Center' },
       badge: 'Smart Campus Printing',
       text: 'Skip Lines. Print Smart.',
       subtitle: 'Upload documents straight from your hostel or phone. Collect instantly at campus express kiosks.',
@@ -48,7 +48,7 @@ export default function ImageScroller({
       priceBadge: 'From ₹1.50 / page',
     },
     {
-      image: { src: '/campus_service_center.jpg', alt: 'Bright Campus Print & Xerox Center' },
+      image: { src: '/images/reg_campus_hub.jpg', alt: 'Bright Campus Student Print Collection Hub' },
       badge: 'Express Campus Service',
       text: 'Print & Xerox Center',
       subtitle: 'Fast counter pickups, high-speed multi-function copiers, thesis binding, and instant document solutions.',
@@ -57,9 +57,8 @@ export default function ImageScroller({
       ctaLink: '/login',
       priceBadge: '< 2 Hours Turnaround',
     },
-
     {
-      image: { src: '/svc_bw.jpg', alt: 'High Volume Laser Duplication' },
+      image: { src: '/carousel/organized_study_desk.jpg', alt: 'Bright Sunlit Academic Study & Thesis Station' },
       badge: '1200 DPI Laser Clarity',
       text: 'Fast Academic Duplication',
       subtitle: 'High-speed lecture notes, question banks, and research papers with clean duplex printing.',
@@ -444,34 +443,31 @@ export default function ImageScroller({
                   objectPosition: 'center',
                   display: 'block',
                   userSelect: 'none',
-                  filter: 'brightness(0.9) contrast(1.04)',
+                  filter: 'brightness(1.05) contrast(1.02) saturate(1.04)',
                   transform: isActive ? 'scale(1.03)' : 'scale(1)',
                   transition: 'transform 6s ease-out',
                 }}
                 draggable={false}
               />
 
-              {/* Balanced lighting gradient overlay - comfortably soft without glare */}
+              {/* Balanced natural lighting gradient overlay - bright and open */}
               <div
                 style={{
                   position: 'absolute',
                   inset: 0,
                   background:
-                    'linear-gradient(to top, rgba(7, 11, 20, 0.86) 0%, rgba(7, 11, 20, 0.38) 45%, rgba(7, 11, 20, 0.52) 100%)',
+                    'linear-gradient(to top, rgba(10, 15, 29, 0.68) 0%, rgba(10, 15, 29, 0.14) 48%, rgba(10, 15, 29, 0.35) 100%)',
                   pointerEvents: 'none',
                 }}
               />
 
-              {/* Accent colored glow aura matching theme */}
+              {/* Soft radial backdrop to enhance center text legibility without dimming the bright daylight */}
               <div
                 style={{
                   position: 'absolute',
-                  top: '20%',
-                  left: '30%',
-                  width: '40vw',
-                  height: '40vw',
-                  background: 'radial-gradient(circle, rgba(37, 99, 235, 0.25) 0%, transparent 70%)',
-                  filter: 'blur(80px)',
+                  inset: 0,
+                  background:
+                    'radial-gradient(ellipse at 50% 44%, rgba(10, 15, 29, 0.32) 0%, transparent 68%)',
                   pointerEvents: 'none',
                 }}
               />
