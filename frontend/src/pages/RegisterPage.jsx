@@ -28,12 +28,12 @@ const YEARS = [
 ];
 
 const SLIDER_SLIDES = [
-  { image: '/images/xerox_machines_row.jpg' },
-  { image: '/images/xerox_campus_queue.jpg' },
-  { image: '/images/xerox_scan_platen.jpg' },
-  { image: '/images/xerox_ink_splash.jpg' },
-  { image: '/images/xerox_speed_runner.png' },
-  { image: '/images/xerox_paper_vortex.png' },
+  { image: '/carousel/mobile_campus_print.jpg' },
+  { image: '/carousel/xerox_campus_queue.jpg' },
+  { image: '/carousel/reg_press_production.jpg' },
+  { image: '/carousel/reg_thesis_binding.jpg' },
+  { image: '/carousel/organized_study_desk.jpg' },
+  { image: '/carousel/glasscard_kiosk.jpg' },
 ];
 
 export default function RegisterPage() {

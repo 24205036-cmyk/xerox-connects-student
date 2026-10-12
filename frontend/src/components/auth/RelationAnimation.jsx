@@ -1,126 +1,126 @@
 import React, { useState } from 'react';
 import GlobeCarousel3D from './GlobeCarousel3D';
 
-// 20 Unique, Non-Repeating Images Tailored to XeroXpress Print Ecosystem
+// 20 Unique, Non-Repeating Coordinated Photographic Assets Tailored to XeroXpress Print Ecosystem
 const CAROUSEL_IMAGES = [
   {
-    src: '/carousel/phone_paper_stream.png',
-    title: 'Mobile Direct Print Stream',
-    subtitle: 'Upload assignments directly from mobile to printer without extra drivers or cables.',
-    tag: 'FEATURED 01 • DIRECT FEED'
+    src: '/carousel/mobile_campus_print.jpg',
+    title: 'Mobile Cloud Print Dispatch',
+    subtitle: 'Upload coursework directly from your smartphone to the campus print queue without drivers.',
+    tag: 'MOBILE • DIRECT FEED'
   },
   {
-    src: '/carousel/paper_mountain_stress.png',
-    title: 'End Manual Paper Chaos',
-    subtitle: 'Eliminate disorganized paper towers, lost assignments, and endless counter queues.',
-    tag: 'FEATURED 02 • QUEUE BYPASS'
-  },
-  {
-    src: '/carousel/holographic_mobile_qr.png',
-    title: 'Touchless Holographic QR Print',
-    subtitle: 'Wave your mobile QR pass over the reader to print and authenticate instantly.',
-    tag: 'TOUCHLESS • QR DISPATCH'
-  },
-  {
-    src: '/carousel/anime_xerox_exhausted.jpg',
-    title: 'Late Night Submission Hero',
-    subtitle: 'No more staying up all night wrestling with broken campus printers.',
-    tag: 'STUDENT LIFE • ZERO DEADLINE STRESS'
+    src: '/carousel/organized_study_desk.jpg',
+    title: 'Organized Academic Workstations',
+    subtitle: 'Keep your course materials, lab reports, and assignments bound and organized with zero stress.',
+    tag: 'ACADEMIC • ZERO DEADLINE STRESS'
   },
   {
     src: '/carousel/student_qr_kiosk.jpg',
-    title: 'Campus QR Code Print Kiosk',
-    subtitle: 'Instant tap-and-collect automated printing terminals across the university.',
+    title: 'Autonomous QR Print Kiosk',
+    subtitle: 'Tap your student digital pass or scan QR code to release secure printouts instantly.',
     tag: 'HARDWARE • SMART KIOSK'
   },
   {
-    src: '/carousel/epson_smart_scanner.png',
-    title: 'High-Speed Duplex Scanner',
-    subtitle: 'Dual-side scanning with instant optical OCR and direct PDF cloud upload.',
-    tag: 'SCANNING • 600 DPI DUPLEX'
+    src: '/carousel/login_student.jpg',
+    title: 'Digital Student Print Portal',
+    subtitle: 'Track print quotas, submit lab records, and review document status in real time.',
+    tag: 'STUDENT PORTAL • 24/7 ACCESS'
   },
   {
-    src: '/carousel/laptop_digital_docs.png',
-    title: 'Cloud Document Dispatch',
-    subtitle: 'Send Word, PDF, and PPT files straight from student portal to Xerox queue.',
-    tag: 'PORTAL • INSTANT SYNC'
+    src: '/carousel/hero_printer.jpg',
+    title: 'Commercial Digital Laser Press',
+    subtitle: 'Heavy-duty commercial engines capable of handling peak campus submission rush hours.',
+    tag: 'HARDWARE • PRODUCTION ENGINE'
   },
   {
-    src: '/carousel/printed_charts_pen.png',
-    title: 'Precision Report Analytics',
-    subtitle: 'Crisp color charts, technical tables, and presentation document outputs.',
-    tag: 'COLOR PRINT • HIGH DEFINITION'
+    src: '/carousel/campus_service_center.jpg',
+    title: 'Campus Central Print Center',
+    subtitle: 'Dedicated full-service counters located right next to the library and academic blocks.',
+    tag: 'CAMPUS • SERVICE CENTER'
   },
   {
-    src: '/carousel/cartoon_xerox_flying_paper.png',
-    title: 'Continuous High-Speed Output',
-    subtitle: 'High capacity paper trays and automated jam prevention mechanisms.',
-    tag: 'PERFORMANCE • RELIABLE FEED'
-  },
-  {
-    src: '/carousel/color_press.jpg',
-    title: 'Digital High-Speed Press',
-    subtitle: 'High precision 2400 DPI duplex laser printing at 60 pages per minute.',
-    tag: 'SYSTEM • 60 PPM LASER'
-  },
-  {
-    src: '/carousel/reg_thesis_binding.jpg',
-    title: 'Hardcover & Thesis Binding',
-    subtitle: 'University standard thermal, spiral, and gold-embossed project binding.',
-    tag: 'FINISHING • ACADEMIC'
-  },
-  {
-    src: '/carousel/glasscard_kiosk.jpg',
-    title: 'Self-Serve Pickup Kiosk',
-    subtitle: 'Instant QR code tap-and-collect station for 24/7 autonomous collection.',
-    tag: 'HARDWARE • SMART KIOSK'
-  },
-  {
-    src: '/carousel/xerox_scan_platen.jpg',
-    title: 'Ultra-Clear Duplex Scanning',
-    subtitle: 'Optical character recognition (OCR) and instant PDF cloud sync.',
-    tag: 'OPTICAL • 600 DPI SCAN'
-  },
-  {
-    src: '/carousel/reg_campus_hub.jpg',
-    title: 'Campus-Wide Print Hub',
-    subtitle: 'Coordinated across main library, cafeteria, and department terminals.',
-    tag: 'NETWORK • MULTI-BRANCH'
-  },
-  {
-    src: '/carousel/xerox_speed_runner.png',
-    title: '5-Minute Express Turnaround',
-    subtitle: 'Automated job priority scheduling eliminates physical counter wait times.',
-    tag: 'DISPATCH • 5-MIN FAST TRACK'
+    src: '/carousel/svc_pdf.jpg',
+    title: 'Smart PDF Pre-Press Engine',
+    subtitle: 'Automated margin check, page counting, color breakdown, and print preview before dispatch.',
+    tag: 'ENGINE • INSTANT OCR & PREVIEW'
   },
   {
     src: '/carousel/svc_color.jpg',
     title: 'CAD & Engineering Plotting',
-    subtitle: 'Large format blueprint drawing and high-fidelity presentation charts.',
-    tag: 'FORMAT • A0-A3 PLOTTER'
+    subtitle: 'High precision wide-format blueprint drawing and high-fidelity presentation posters.',
+    tag: 'FORMAT • COLOR PLOTTER'
+  },
+  {
+    src: '/carousel/reg_press_production.jpg',
+    title: 'Automated High-Speed Production',
+    subtitle: 'Continuous high-volume duplex printing with inline stapling and sorting.',
+    tag: 'PERFORMANCE • RELIABLE FEED'
+  },
+  {
+    src: '/carousel/color_press.jpg',
+    title: '2400 DPI High-Definition Color',
+    subtitle: 'True-to-life CMYK calibration for project presentations and conference papers.',
+    tag: 'SYSTEM • 2400 DPI LASER'
+  },
+  {
+    src: '/carousel/reg_thesis_binding.jpg',
+    title: 'Hardcover & Thesis Binding',
+    subtitle: 'University standard thermal, spiral, wire-o, and gold-embossed project binding.',
+    tag: 'FINISHING • ACADEMIC THESIS'
+  },
+  {
+    src: '/carousel/glasscard_kiosk.jpg',
+    title: 'Self-Serve Express Terminal',
+    subtitle: 'Autonomous tap-and-collect station for picking up confidential documents after hours.',
+    tag: 'EXPRESS • 24/7 TERMINAL'
+  },
+  {
+    src: '/carousel/xerox_scan_platen.jpg',
+    title: 'Ultra-Clear Duplex Scanning',
+    subtitle: 'High-resolution platen scanning with instant OCR and direct university cloud sync.',
+    tag: 'OPTICAL • 600 DPI SCAN'
+  },
+  {
+    src: '/carousel/campus_hub.jpg',
+    title: 'Campus-Wide Print Network',
+    subtitle: 'Seamlessly linked across university libraries, academic departments, and student hostels.',
+    tag: 'NETWORK • MULTI-BRANCH'
+  },
+  {
+    src: '/carousel/xerox_campus_queue.jpg',
+    title: 'Zero-Wait Queue Management',
+    subtitle: 'Smart queuing algorithm reserves your collection slot and notifies you when prints are ready.',
+    tag: 'DISPATCH • 5-MIN FAST TRACK'
+  },
+  {
+    src: '/carousel/svc_bw.jpg',
+    title: 'High-Speed B&W Laser Stream',
+    subtitle: 'Crisp 120 PPM monochrome output optimized for high-volume lecture notes.',
+    tag: 'SPEED • 120 PPM MONO'
   },
   {
     src: '/carousel/svc_stationery.jpg',
-    title: 'Stationery & Project Supplies',
-    subtitle: 'Examination papers, drawing sheets, lab record materials & files.',
+    title: 'Academic Stationery & Supplies',
+    subtitle: 'Official examination sheets, graph paper, lab record binders, and project files.',
     tag: 'SUPPLIES • CAMPUS READY'
   },
   {
     src: '/carousel/reg_student_print.jpg',
-    title: 'Counter Collection Desk',
-    subtitle: 'Quick pickup with digital verification code — no confusion or lost sheets.',
+    title: 'Counter Collection & Delivery',
+    subtitle: 'Quick pickup with dynamic 4-digit verification code — zero confusion, zero lost sheets.',
     tag: 'COLLECTION • ZERO WAIT'
   },
   {
-    src: '/carousel/xerox_paper_vortex.png',
-    title: 'Bulk Lecture Notes & Packets',
-    subtitle: 'Automated collating, double-sided stapling, and bound handout sets.',
-    tag: 'BULK PRINT • AUTOMATED COLLATING'
+    src: '/carousel/reg_campus_hub.jpg',
+    title: 'Library Digital Resource Center',
+    subtitle: 'Integrated printing connected directly with campus library workstations and repositories.',
+    tag: 'LIBRARY • DIGITAL HUB'
   },
   {
     src: '/carousel/svc_lab.jpg',
     title: 'Lab Manuals & Graph Books',
-    subtitle: 'Grid ruled graph sheets, circuit diagrams, and university format records.',
+    subtitle: 'Standard format university lab records, circuit schematics, and calculation logbooks.',
     tag: 'LAB RECORDS • APPROVED FORMAT'
   }
 ];
