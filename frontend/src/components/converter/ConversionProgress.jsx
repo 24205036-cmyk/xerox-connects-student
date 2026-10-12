@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Loader2, Sparkles, CheckCircle2, Zap } from 'lucide-react';
+import { Loader2, CheckCircle2, Zap } from 'lucide-react';
 
 const stages = [
   'Extracting document content...',
@@ -35,7 +35,7 @@ export default function ConversionProgress({
 
       <div className="space-y-1.5">
         <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider border border-blue-200">
-          <Sparkles className="w-3.5 h-3.5" /> High-Speed Engine Active
+          High-Speed Engine Active
         </div>
         <h3 className="text-2xl font-black text-slate-900 tracking-tight">
           Converting & Saving Your Document...

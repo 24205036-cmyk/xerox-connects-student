@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronDown,
-  Sparkles,
   ArrowRight,
   Printer
 } from 'lucide-react';
@@ -525,7 +524,6 @@ export default function ImageScroller({
                       boxShadow: '0 4px 20px rgba(37, 99, 235, 0.25)',
                     }}
                   >
-                    <Sparkles style={{ width: 13, height: 13, color: '#60a5fa' }} />
                     {item.badge || 'XeroXpress Campus Network'}
                   </div>
 
@@ -614,7 +612,6 @@ export default function ImageScroller({
                           fontSize: 14,
                         }}
                       >
-                        <span style={{ color: '#38bdf8' }}>✦</span>
                         <span>{item.priceBadge}</span>
                       </div>
                     )}

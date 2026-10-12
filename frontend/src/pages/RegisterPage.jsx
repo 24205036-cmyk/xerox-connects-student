@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   User, Mail, Phone, BookOpen, GraduationCap, Lock,
-  ArrowRight, AlertCircle, Sparkles, Loader2, Eye, EyeOff,
+  ArrowRight, AlertCircle, Loader2, Eye, EyeOff,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import Scroll3dSlider from '../components/3d/Scroll3dSlider';
@@ -388,7 +388,7 @@ export default function RegisterPage() {
                 {isSubmitting ? (
                   <><Loader2 className="w-4 h-4 animate-spin" />Creating Account…</>
                 ) : (
-                  <><Sparkles className="w-4 h-4" />Complete Registration<ArrowRight className="w-4 h-4" /></>
+                  <>Complete Registration<ArrowRight className="w-4 h-4" /></>
                 )}
               </button>
             </form>

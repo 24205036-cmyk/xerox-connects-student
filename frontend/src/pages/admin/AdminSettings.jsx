@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Settings, Clock, Power, QrCode, Save, 
-  RefreshCw, CheckCircle2, AlertCircle, Loader2, Sparkles 
+  RefreshCw, CheckCircle2, AlertCircle, Loader2 
 } from 'lucide-react';
 import { getAdminSettings, updateAdminSettings } from '../../services/api';
 import { useToast } from '../../context/ToastContext';

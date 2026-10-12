@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   BarChart3, IndianRupee, Printer, PenTool, 
-  TrendingUp, Users, RefreshCw, Calendar, Sparkles, Layers 
+  TrendingUp, Users, RefreshCw, Calendar, Layers 
 } from 'lucide-react';
 import { getAdminReports } from '../../services/api';
 import { useToast } from '../../context/ToastContext';

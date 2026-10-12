@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   IndianRupee, Printer, Save, RefreshCw, 
-  Calculator, CheckCircle2, AlertCircle, Loader2, Sparkles 
+  Calculator, CheckCircle2, AlertCircle, Loader2 
 } from 'lucide-react';
 import { getAdminPricing, updateAdminPricing } from '../../services/api';
 import { useToast } from '../../context/ToastContext';

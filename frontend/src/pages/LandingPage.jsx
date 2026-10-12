@@ -120,7 +120,7 @@ export default function LandingPage() {
                 fontSize: 11, fontWeight: 700, color: '#1d4ed8',
                 marginBottom: 20, textTransform: 'uppercase', letterSpacing: '0.06em',
               }}>
-                ✦ Smart Campus Printing. Perfect Results.
+                Smart Campus Printing. Perfect Results.
               </div>
 
               {/* Heading */}

@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
   UploadCloud, FileText, CheckCircle2, AlertCircle, Trash2,
   Settings2, Plus, Minus, Info, ArrowRight, ArrowLeft,
-  Sparkles, Layers, ShieldCheck, HelpCircle, FileCheck,
+  Layers, ShieldCheck, HelpCircle, FileCheck,
   FileCode2, CornerDownRight, IndianRupee, Loader2, RefreshCw,
   ShoppingCart, Package, CreditCard, SendHorizonal, Receipt, Smartphone, Lock
 } from 'lucide-react';
@@ -362,7 +362,6 @@ export default function NewOrderPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-200/80 pb-5">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-indigo-600 uppercase tracking-wider mb-1">
-            <Sparkles className="w-3.5 h-3.5" />
             <span>Order Creation Studio</span>
           </div>
           <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">

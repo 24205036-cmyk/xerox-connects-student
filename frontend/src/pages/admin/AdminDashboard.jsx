@@ -4,7 +4,7 @@ import {
   Printer, Clock, CheckCircle2, PackageCheck, RefreshCw,
   Loader2, AlertCircle, FileText, Package, User,
   ChevronRight, Calendar, IndianRupee, LayoutGrid, List,
-  Search, Check, Sparkles, Filter, ChevronDown, Copy, CheckCheck,
+  Search, Check, Filter, ChevronDown, Copy, CheckCheck,
   BarChart2, ArrowRight
 } from 'lucide-react';
 import { getAdminDashboard } from '../../services/api';
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
 
               {/* Floating Top Badge */}
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white/95 backdrop-blur-xs border border-emerald-200 px-3 py-1 rounded-full text-[10px] font-extrabold text-emerald-800 shadow-sm whitespace-nowrap z-20 transition-transform group-hover:-translate-y-1">
-                ✨ 60 PPM Multi-Tray Laser
+                60 PPM Multi-Tray Laser
               </div>
 
               {/* 3D Printer Graphic */}

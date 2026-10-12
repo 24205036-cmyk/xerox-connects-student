@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft, FileText, Package, User, Phone, Mail, RefreshCw,
   Loader2, AlertCircle, CheckCircle2, Clock, Printer, PackageCheck,
-  IndianRupee, ChevronRight, Calendar, Download, Sparkles, Check, CheckCheck, Copy
+  IndianRupee, ChevronRight, Calendar, Download, Check, CheckCheck, Copy
 } from 'lucide-react';
 import { getStaffOrderDetail, updateOrderStatus } from '../../services/api';
 import StatusBadge from '../../components/StatusBadge';

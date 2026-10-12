@@ -5,7 +5,7 @@ import {
   ShoppingBag, ArrowRight, IndianRupee, GraduationCap, Loader2,
   RefreshCw, Package, Calendar, ChevronRight, Percent,
   Eye, Layers, Copy, Check, ShieldCheck, MapPin, Search, X,
-  UploadCloud, Sparkles
+  UploadCloud
 } from 'lucide-react';
 import StatusBadge from '../../components/StatusBadge';
 import { getStudentDashboard } from '../../services/api';

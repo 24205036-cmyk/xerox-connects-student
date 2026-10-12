@@ -1,7 +1,7 @@
 import React from 'react';
 import { 
   CheckCircle2, Download, RefreshCw, FileText, 
-  ArrowRight, Printer, Sparkles, FolderDown 
+  ArrowRight, Printer, FolderDown 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +54,6 @@ export default function ConversionResult({
 
       <div className="space-y-1.5">
         <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider border border-emerald-200">
-          <Sparkles className="w-3.5 h-3.5" />
           Conversion Complete ✓
         </div>
         <h3 className="text-2xl font-black text-slate-900 tracking-tight">

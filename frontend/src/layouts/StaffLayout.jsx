@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Printer, ListOrdered, CheckCircle2, ArrowLeft, LogOut, 
   Briefcase, Clock, ChevronLeft, ChevronRight, Menu, X, 
-  Search, ShieldAlert, Sparkles, RefreshCw, Layers, ExternalLink
+  Search, ShieldAlert, RefreshCw, Layers, ExternalLink
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import NotificationDropdown from '../components/NotificationDropdown';

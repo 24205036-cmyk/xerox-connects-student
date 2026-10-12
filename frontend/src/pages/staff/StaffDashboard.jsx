@@ -4,7 +4,7 @@ import {
   Printer, Clock, CheckCircle2, PackageCheck, RefreshCw,
   Loader2, AlertCircle, FileText, Package, User,
   ChevronRight, Calendar, IndianRupee, LayoutGrid, List,
-  Search, Check, Sparkles, Filter, Phone, ArrowUpRight, Copy, CheckCheck
+  Search, Check, Filter, Phone, ArrowUpRight, Copy, CheckCheck
 } from 'lucide-react';
 import { getStaffOrders, updateOrderStatus } from '../../services/api';
 import StatusBadge from '../../components/StatusBadge';

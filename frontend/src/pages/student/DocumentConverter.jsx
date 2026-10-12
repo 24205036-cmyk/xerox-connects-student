@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  FileText, Sparkles, ArrowRight, RefreshCw, 
+  FileText, ArrowRight, RefreshCw, 
   CheckCircle2, Download, History, Clock, FileCode2, Info, ArrowLeft, AlertCircle 
 } from 'lucide-react';
 import Converter3DScene from '../../components/converter/Converter3DScene';
@@ -148,7 +148,6 @@ export default function DocumentConverter() {
       {/* Header Banner */}
       <div className="p-6 sm:p-8 rounded-3xl clay-card-light border border-slate-200 shadow-sm space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold uppercase tracking-wider">
-          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
           Independent Document Utility Module
         </div>
         <h1 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">

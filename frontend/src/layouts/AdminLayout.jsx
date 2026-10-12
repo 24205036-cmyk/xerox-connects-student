@@ -5,7 +5,7 @@ import {
   IndianRupee, Settings, BarChart3, ArrowLeft, LogOut, 
   Shield, LayoutDashboard, Bell, FileSpreadsheet,
   ChevronLeft, ChevronRight, Menu, X, Search, Crown,
-  Plus, FileText, Sparkles, Store, Database, ChevronDown
+  Plus, FileText, Store, Database, ChevronDown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import NotificationDropdown from '../components/NotificationDropdown';
